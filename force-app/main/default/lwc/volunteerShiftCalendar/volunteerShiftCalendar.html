@@ -1,0 +1,246 @@
+<template>
+    <div class="calendar">
+        <h2 lwc:if={calendarTitle} class="calendar__title">{calendarTitle}</h2>
+
+        <section lwc:if={showFilterBar} class="filters" aria-label="Filter shifts">
+            <div class="filters__grid">
+                <label lwc:if={isPositionFilterOn} class="field">
+                    <span class="field__label">Position</span>
+                    <select data-filter="positionId" onchange={handleFilterChange}>
+                        <option value="" selected={noPositionSelected}>All positions</option>
+                        <template for:each={positionChoices} for:item="choice">
+                            <option key={choice.value} value={choice.value} selected={choice.selected}>{choice.label}</option>
+                        </template>
+                    </select>
+                </label>
+
+                <label lwc:if={isInitiativeFilterOn} class="field">
+                    <span class="field__label">Volunteer Initiative</span>
+                    <select data-filter="initiativeId" onchange={handleFilterChange}>
+                        <option value="" selected={noInitiativeSelected}>All initiatives</option>
+                        <template for:each={initiativeChoices} for:item="choice">
+                            <option key={choice.value} value={choice.value} selected={choice.selected}>{choice.label}</option>
+                        </template>
+                    </select>
+                </label>
+
+                <template lwc:if={isDateRangeFilterOn}>
+                    <label class="field">
+                        <span class="field__label">From date</span>
+                        <input type="date" data-filter="fromDate" value={fromDate} onchange={handleFilterChange} />
+                    </label>
+                    <label class="field">
+                        <span class="field__label">To date</span>
+                        <input type="date" data-filter="toDate" value={toDate} min={fromDate} onchange={handleFilterChange} />
+                    </label>
+                </template>
+
+                <label lwc:if={isStartTimeFilterOn} class="field">
+                    <span class="field__label">Start Time (shifts starting at or after)</span>
+                    <input type="time" data-filter="startTime" value={startTime} onchange={handleFilterChange} />
+                </label>
+
+                <label lwc:if={isEndTimeFilterOn} class="field">
+                    <span class="field__label">End Time (shifts ending at or before)</span>
+                    <input type="time" data-filter="endTime" value={endTime} onchange={handleFilterChange} />
+                </label>
+
+                <label lwc:if={isShiftLengthFilterOn} class="field field--slider">
+                    <span class="field__label">Shift Length</span>
+                    <span class="slider">
+                        <input
+                            type="range"
+                            min="1"
+                            max="12"
+                            step="1"
+                            data-filter="maxHours"
+                            value={maxHours}
+                            aria-valuetext={shiftLengthText}
+                            onchange={handleFilterChange}
+                            oninput={handleFilterChange}
+                        />
+                        <output class="slider__value">{shiftLengthText}</output>
+                    </span>
+                </label>
+            </div>
+            <button type="button" class="btn btn--link" onclick={handleClearFilters}>Clear Filters</button>
+        </section>
+
+        <div class="toolbar">
+            <div class="toolbar__nav">
+                <button type="button" class="btn" onclick={handlePrevious}>Previous</button>
+                <button type="button" class="btn" onclick={handleNext}>Next</button>
+                <button type="button" class="btn" onclick={handleToday}>Today</button>
+            </div>
+            <h3 class="toolbar__month" aria-live="polite">{monthLabel}</h3>
+        </div>
+
+        <ul lwc:if={showLegend} class="legend" aria-label="Color legend: positions shown on this calendar">
+            <template for:each={legend} for:item="item">
+                <li key={item.id} class="legend__item">
+                    <span class={item.swatchClass} aria-hidden="true"></span>
+                    <span>{item.name}</span>
+                </li>
+            </template>
+        </ul>
+
+        <p lwc:if={loadError} class="message message--error" role="alert">{loadError}</p>
+        <p lwc:if={showEmptyMessage} class="message" role="status">{emptyMessage}</p>
+
+        <div class="grid-wrap">
+            <lightning-spinner lwc:if={isLoading} alternative-text="Loading shifts" size="medium"></lightning-spinner>
+            <ul class="weekdays" aria-hidden="true">
+                <template for:each={weekdayLabels} for:item="weekday">
+                    <li key={weekday.key}>{weekday.label}</li>
+                </template>
+            </ul>
+            <ul class="grid" aria-label={gridLabel}>
+                <template for:each={days} for:item="day">
+                    <li key={day.key} class={day.className}>
+                        <div class="day__head">
+                            <span class="day__num" aria-hidden="true">{day.dayNumber}</span>
+                            <span class="day__label">{day.longLabel}</span>
+                        </div>
+                        <ul lwc:if={day.hasShifts} class="day__shifts">
+                            <template for:each={day.shifts} for:item="shift">
+                                <li key={shift.id} class={shift.itemClass}>
+                                    <button
+                                        type="button"
+                                        class={shift.buttonClass}
+                                        data-id={shift.id}
+                                        data-focus-key={shift.focusKey}
+                                        disabled={shift.isFull}
+                                        aria-label={shift.ariaLabel}
+                                        onclick={handleShiftClick}
+                                    >
+                                        <span class="shift__time">{shift.timeLabel}</span>
+                                        <span class="shift__position">{shift.positionName}</span>
+                                        <span lwc:if={shift.initiativeName} class="shift__initiative">{shift.initiativeName}</span>
+                                        <span class="shift__capacity">{shift.capacityLabel}</span>
+                                    </button>
+                                </li>
+                            </template>
+                        </ul>
+                        <button
+                            lwc:if={day.hasOverflow}
+                            type="button"
+                            class="more"
+                            data-day={day.key}
+                            data-focus-key={day.moreFocusKey}
+                            aria-label={day.moreAriaLabel}
+                            onclick={handleMoreClick}
+                        >+{day.overflowCount} more</button>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </div>
+
+    <div lwc:if={isDialogOpen} class="backdrop" onclick={handleBackdropClick}>
+        <div class="dialog" role="dialog" aria-modal="true" aria-label={dialogTitle} tabindex="-1" onkeydown={handleDialogKeydown}>
+            <div class="dialog__header">
+                <h2 class="dialog__title">{dialogTitle}</h2>
+            </div>
+
+            <div class="dialog__body">
+                <template lwc:if={isDayDialog}>
+                    <ul class="day-list">
+                        <template for:each={dayDialogShifts} for:item="shift">
+                            <li key={shift.id} class={shift.itemClass}>
+                                <button
+                                    type="button"
+                                    class={shift.buttonClass}
+                                    data-id={shift.id}
+                                    disabled={shift.isFull}
+                                    aria-label={shift.ariaLabel}
+                                    onclick={handleShiftClick}
+                                >
+                                    <span class="shift__time">{shift.timeLabel}</span>
+                                    <span class="shift__position">{shift.positionName}</span>
+                                    <span lwc:if={shift.initiativeName} class="shift__initiative">{shift.initiativeName}</span>
+                                    <span class="shift__capacity">{shift.capacityLabel}</span>
+                                </button>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+
+                <template lwc:else>
+                    <div lwc:if={detailLoading} class="dialog__loading">
+                        <lightning-spinner alternative-text="Loading shift details" size="small"></lightning-spinner>
+                    </div>
+                    <p lwc:if={detailError} class="message message--error" role="alert">{detailError}</p>
+
+                    <template lwc:if={detail}>
+                        <dl class="details">
+                            <div class="details__row">
+                                <dt>Description</dt>
+                                <dd>{detail.descriptionText}</dd>
+                            </div>
+                            <div class="details__row">
+                                <dt>Position</dt>
+                                <dd>{detail.shift.positionName}</dd>
+                            </div>
+                            <div class="details__row">
+                                <dt>Volunteer Initiative</dt>
+                                <dd>{detail.initiativeText}</dd>
+                            </div>
+                            <div class="details__row">
+                                <dt>Start Date/Time</dt>
+                                <dd>{detail.startLabel}</dd>
+                            </div>
+                            <div class="details__row">
+                                <dt>End Date/Time</dt>
+                                <dd>{detail.endLabel}</dd>
+                            </div>
+                            <div class="details__row">
+                                <dt>Capacity</dt>
+                                <dd>{detail.capacityText}</dd>
+                            </div>
+                            <div class="details__row">
+                                <dt>Remaining Capacity</dt>
+                                <dd>{detail.remainingText}</dd>
+                            </div>
+                        </dl>
+
+                        <h3 class="qualifications__title">Qualifications</h3>
+                        <p lwc:if={detail.hasNoQualifications} class="qualifications__none">This position has no required qualifications.</p>
+                        <ul lwc:else class="qualifications">
+                            <template for:each={detail.qualifications} for:item="qualification">
+                                <li key={qualification.key} class="qualification">
+                                    <span class="qualification__name">{qualification.name}</span>
+                                    <span class="qualification__type">{qualification.typeLabel}</span>
+                                    <span class={qualification.statusClass}>
+                                        <lightning-icon
+                                            icon-name={qualification.iconName}
+                                            variant={qualification.iconVariant}
+                                            size="x-small"
+                                            alternative-text=""
+                                        ></lightning-icon>
+                                        <span>{qualification.status}</span>
+                                    </span>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+
+                    <p lwc:if={successMessage} class="message message--success" role="status">{successMessage}</p>
+                    <p lwc:if={signUpError} class="message message--error" role="alert">{signUpError}</p>
+                    <p lwc:if={showBlockedMessage} class="message message--error">{detail.blockedMessage}</p>
+                    <p lwc:if={isSignedUp} class="message message--success">You are signed up for this shift</p>
+                </template>
+            </div>
+
+            <div class="dialog__footer">
+                <button
+                    lwc:if={isShiftDialog}
+                    type="button"
+                    class="btn btn--brand"
+                    disabled={signUpDisabled}
+                    onclick={handleSignUp}
+                >{signUpLabel}</button>
+                <button type="button" class="btn" onclick={handleCloseDialog}>Close</button>
+            </div>
+        </div>
+    </div>
+</template>

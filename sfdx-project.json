@@ -1,0 +1,19 @@
+{
+  "packageDirectories": [
+    {
+      "versionName": "ver 0.1",
+      "versionNumber": "0.1.0.NEXT",
+      "path": "force-app",
+      "default": true,
+      "package": "Volunteer Calendar",
+      "versionDescription": ""
+    }
+  ],
+  "name": "VolunteerCalendar",
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "68.0",
+  "packageAliases": {
+    "Volunteer Calendar": "0HojV0000001gGXSAY"
+  }
+}

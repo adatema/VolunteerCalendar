@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Position_Required_To_Publish</fullName>
+    <active>true</active>
+    <description>Blocks saving a published shift that has no Job Position selected.</description>
+    <errorConditionFormula>AND(Published__c, ISBLANK(JobPositionId))</errorConditionFormula>
+    <errorDisplayField>JobPositionId</errorDisplayField>
+    <errorMessage>A shift cannot be published until a Position is selected.</errorMessage>
+</ValidationRule>

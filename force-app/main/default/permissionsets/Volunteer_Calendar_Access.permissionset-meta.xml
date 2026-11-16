@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Volunteer Calendar Access</label>
+    <description>Lets volunteers use the volunteer shift calendar: see published shifts and sign up for them. The calendar does its work on the server, so no object permissions are needed.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <classAccesses>
+        <apexClass>VolunteerCalendarController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+</PermissionSet>

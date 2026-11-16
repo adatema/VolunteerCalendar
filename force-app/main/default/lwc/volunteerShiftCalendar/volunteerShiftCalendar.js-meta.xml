@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>68.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Volunteer Shift Calendar</masterLabel>
+    <description>A calendar where logged-in volunteers can see upcoming published shifts and sign up for them.</description>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="calendarTitle" type="String" label="Calendar Title" description="An optional heading shown above the calendar. Leave it blank to show no heading." />
+            <property name="showPositionFilter" type="Boolean" label="Show Position filter" default="true" description="Lets volunteers show only one position." />
+            <property name="showInitiativeFilter" type="Boolean" label="Show Volunteer Initiative filter" default="true" description="Lets volunteers show only one volunteer initiative." />
+            <property name="showDateRangeFilter" type="Boolean" label="Show Date Range filter" default="true" description="Lets volunteers choose a from date and a to date." />
+            <property name="showStartTimeFilter" type="Boolean" label="Show Start Time filter" default="true" description="Lets volunteers show only shifts that start at or after a time." />
+            <property name="showEndTimeFilter" type="Boolean" label="Show End Time filter" default="true" description="Lets volunteers show only shifts that end at or before a time." />
+            <property name="showShiftLengthFilter" type="Boolean" label="Show Shift Length filter" default="true" description="Lets volunteers show only shifts that are shorter than a number of hours." />
+            <property name="showColorLegend" type="Boolean" label="Show Color Legend" default="true" description="Shows a list of the positions on the calendar next to their colors." />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Calendar_Color__c</fullName>
+    <label>Calendar Color</label>
+    <description>Sets the color used for this position's shifts on the volunteer calendar. Red and grey are not offered because they are reserved for unmet qualifications and full shifts.</description>
+    <inlineHelpText>Pick the color volunteers will see for every shift of this position. Leave it blank and the calendar picks a color for you.</inlineHelpText>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Blue</fullName>
+                <default>false</default>
+                <label>Blue</label>
+            </value>
+            <value>
+                <fullName>Green</fullName>
+                <default>false</default>
+                <label>Green</label>
+            </value>
+            <value>
+                <fullName>Orange</fullName>
+                <default>false</default>
+                <label>Orange</label>
+            </value>
+            <value>
+                <fullName>Purple</fullName>
+                <default>false</default>
+                <label>Purple</label>
+            </value>
+            <value>
+                <fullName>Teal</fullName>
+                <default>false</default>
+                <label>Teal</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

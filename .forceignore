@@ -4,6 +4,9 @@
 
 package.xml
 
+# Sharing rules are not needed by the calendar and are kept out of the package
+**/sharingRules/**
+
 # LWC configuration files
 **/jsconfig.json
 **/.eslintrc.json

@@ -1,12 +1,13 @@
 {
   "packageDirectories": [
     {
-      "versionName": "ver 0.1",
-      "versionNumber": "0.1.0.NEXT",
       "path": "force-app",
       "default": true,
       "package": "Volunteer Calendar",
-      "versionDescription": ""
+      "versionName": "Version 1.0",
+      "versionNumber": "1.0.0.NEXT",
+      "versionDescription": "Volunteer calendar and shift sign-up for Experience sites",
+      "definitionFile": "config/package-scratch-def.json"
     }
   ],
   "name": "VolunteerCalendar",
@@ -14,6 +15,7 @@
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "68.0",
   "packageAliases": {
-    "Volunteer Calendar": "0HojV0000001gGXSAY"
+    "Volunteer Calendar": "0HojV0000001gGXSAY",
+    "Volunteer Calendar@1.0.0-1": "04t5g0000012X1KEA0"
   }
 }

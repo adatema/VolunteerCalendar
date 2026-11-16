@@ -1,0 +1,30 @@
+{
+  "orgName": "Nonprofit Cloud Volunteer Dev",
+  "edition": "Enterprise",
+  "features": [
+    "EnableSetPasswordInApi",
+    "PersonAccounts",
+    "ContactsToMultipleAccounts",
+    "Fundraising",
+    "ProgramManagement",
+    "OutcomeManagement",
+    "VolunteerManagement",
+    "Communities",
+    "IndustriesActionPlan",
+    "Assessments"
+  ],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    },
+    "communitiesSettings": {
+      "enableNetworksEnabled": true
+    },
+    "industriesSettings": {
+      "enableFundraising": true
+    }
+  }
+}

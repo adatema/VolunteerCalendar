@@ -35,3 +35,7 @@ The org you install into needs these turned on, because the calendar is built on
 - A volunteer must have a Person Account to sign up. Sign-ups are saved as **Upcoming** assignments.
 - A qualification (Competency or Examination) is met when the volunteer has a matching record that started on or before the shift start and either has no end date or ends on or after the shift start. Otherwise it shows Not met, or Expired when it ended before the shift.
 - Volunteers can only see published, active, upcoming shifts through the calendar, and only their own qualifications are checked. The calendar never shows another volunteer's information.
+
+##Installation Links
+- Production and Developer Edition orgs: https://login.salesforce.com/packaging/installPackage.apexp?p0=04tjV000000DvrhQAC
+- Sandboxes: https://test.salesforce.com/packaging/installPackage.apexp?p0=04tjV000000DvrhQAC

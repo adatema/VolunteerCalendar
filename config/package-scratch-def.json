@@ -24,7 +24,8 @@
       "enableNetworksEnabled": true
     },
     "industriesSettings": {
-      "enableFundraising": true
+      "enableFundraising": true,
+      "enableVolunteerManagement": true
     }
   }
 }
